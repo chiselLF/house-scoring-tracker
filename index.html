@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>House Hunting Tracker - Multi-Profile</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --green: #16a34a;
+      --amber: #d97706;
+      --red: #dc2626;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 0; }
+    body { background-color: var(--bg); color: var(--text); padding: 16px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 680px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); padding: 20px; }
+    
+    header { margin-bottom: 14px; }
+    h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 10px; }
+    
+    .profile-bar { display: flex; align-items: center; justify-content: space-between; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; }
+    .profile-select-group { display: flex; align-items: center; gap: 8px; }
+    .profile-select { padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border); font-weight: 600; font-size: 0.85rem; background: #fff; }
+    
+    .header-inputs { display: flex; gap: 8px; margin-bottom: 12px; }
+    .unit-input { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; }
+    .input-address { flex: 2; }
+    .input-price { flex: 1; }
+    
+    .score-banner { position: sticky; top: 10px; z-index: 20; background: #0f172a; color: #fff; border-radius: 10px; padding: 14px 16px; margin: 12px 0 16px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .score-value { font-size: 1.75rem; font-weight: 800; line-height: 1; }
+    .verdict-badge { font-size: 0.8rem; font-weight: 600; padding: 4px 10px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .badge-green { background: #dcfce7; color: var(--green); }
+    .badge-amber { background: #fef3c7; color: var(--amber); }
+    .badge-red { background: #fee2e2; color: var(--red); }
+
+    .weight-status { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: 600; padding: 8px 12px; border-radius: 6px; margin-bottom: 16px; background: #f1f5f9; color: var(--text-muted); }
+    .weight-status.warn { background: #fee2e2; color: var(--red); }
+
+    .criterion-card { background: #fdfdfd; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+    .criterion-top { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+    .criterion-name-input { flex: 1; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.9rem; font-weight: 600; }
+    .criterion-weight-wrapper { display: flex; align-items: center; gap: 4px; font-size: 0.85rem; color: var(--text-muted); }
+    .criterion-weight-input { width: 50px; padding: 6px 4px; border: 1px solid var(--border); border-radius: 6px; text-align: center; font-size: 0.85rem; font-weight: 700; }
+    .btn-delete { background: none; border: none; color: var(--red); font-size: 1.2rem; cursor: pointer; padding: 0 6px; line-height: 1; }
+
+    .criterion-slider-row { display: flex; align-items: center; gap: 12px; }
+    input[type="range"] { flex: 1; accent-color: var(--primary); }
+    .score-display { font-weight: 700; width: 20px; text-align: right; font-size: 0.95rem; color: var(--primary); }
+
+    .action-group { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 24px; }
+    .btn { padding: 10px 14px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; cursor: pointer; border: none; text-align: center; }
+    .btn-save { background: var(--green); color: #fff; flex: 2; min-width: 140px; }
+    .btn-secondary { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); flex: 1; min-width: 100px; }
+    .btn:active { opacity: 0.85; }
+
+    .section-title { font-size: 1rem; font-weight: 700; margin: 24px 0 10px; border-top: 1px solid var(--border); padding-top: 16px; display: flex; justify-content: space-between; align-items: center; }
+    .leaderboard-btn-group { display: flex; gap: 4px; }
+    .saved-list { display: flex; flex-direction: column; gap: 10px; }
+    .saved-card { background: #f8fafc; border: 1px solid var(--border); padding: 12px 14px; border-radius: 8px; }
+    .saved-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+    .saved-info-name { font-weight: 700; font-size: 0.95rem; }
+    .saved-info-price { color: var(--primary); font-weight: 600; font-size: 0.85rem; margin-left: 6px; }
+    .saved-scores-breakdown { font-size: 0.8rem; color: var(--text-muted); display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+    .profile-pill { background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-weight: 500; }
+    .saved-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; border-top: 1px dashed var(--border); padding-top: 6px; }
+    .btn-sm { padding: 4px 8px; font-size: 0.75rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: #fff; }
+    .btn-sm-del { color: var(--red); border-color: #fca5a5; }
+    .empty-placeholder { text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 20px; font-style: italic; }
+
+    .sync-box { display: none; margin-top: 12px; padding: 12px; background: #f1f5f9; border-radius: 8px; border: 1px solid var(--border); }
+    .sync-textarea { width: 100%; height: 60px; font-size: 0.75rem; font-family: monospace; padding: 6px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <h1>House Hunting Evaluation</h1>
+    <div class="profile-bar">
+      <div class="profile-select-group">
+        <label for="profileSelect" style="font-size: 0.8rem; font-weight: 700;">Evaluator:</label>
+        <select id="profileSelect" class="profile-select"></select>
+      </div>
+      <button type="button" class="btn-sm" id="btnAddProfile">+ New Profile</button>
+    </div>
+
+    <div class="header-inputs">
+      <input type="text" id="propName" class="unit-input input-address" placeholder="Unit Address / Block (e.g., Blk 284 #14-102)" />
+      <input type="text" id="propPrice" class="unit-input input-price" placeholder="Asking Price (e.g. $780k)" />
+    </div>
+  </header>
+
+  <div class="score-banner">
+    <div>
+      <div style="font-size: 0.75rem; opacity: 0.8;" id="scoreBannerLabel">MASON'S SCORE</div>
+      <div class="score-value" id="totalScore">0.00 <span style="font-size: 1rem; font-weight: 400; opacity: 0.7;">/ 5.00</span></div>
+    </div>
+    <div id="verdictBadge" class="verdict-badge badge-amber">Evaluating</div>
+  </div>
+
+  <div id="weightStatusBar" class="weight-status">
+    <span>Total Weight:</span>
+    <span id="weightTotalDisplay">100%</span>
+  </div>
+
+  <div id="criteriaList"></div>
+
+  <div class="action-group">
+    <button type="button" class="btn btn-secondary" id="btnAdd">+ Add Criteria</button>
+    <button type="button" class="btn btn-save" id="btnSaveUnit">Save My Rating</button>
+    <button type="button" class="btn btn-secondary" id="btnResetForm">New Viewing</button>
+  </div>
+
+  <div class="section-title">
+    <span>Visited Units Leaderboard</span>
+    <div class="leaderboard-btn-group">
+      <button type="button" class="btn-sm" id="btnToggleSync">Sync</button>
+      <button type="button" class="btn-sm" id="btnCopyWA">WhatsApp</button>
+      <button type="button" class="btn-sm" id="btnCopyTG">Telegram</button>
+    </div>
+  </div>
+
+  <div id="syncBox" class="sync-box">
+    <div style="font-size: 0.8rem; font-weight: 700; margin-bottom: 4px;">Sync Across Separate Phones:</div>
+    <textarea id="syncDataText" class="sync-textarea" placeholder="Paste sync code here..."></textarea>
+    <div style="display: flex; gap: 6px;">
+      <button type="button" class="btn-sm" id="btnExportSync">Copy Sync Code</button>
+      <button type="button" class="btn-sm" id="btnImportSync">Merge Imported Data</button>
+    </div>
+  </div>
+
+  <div id="savedUnitsList" class="saved-list"></div>
+</div>
+
+<script>
+  const STORAGE_KEY_PROFILES = "house_profiles_v5";
+  const STORAGE_KEY_CRITERIA = "house_criteria_v5";
+  const STORAGE_KEY_SAVED = "house_units_v5";
+
+  const defaultProfiles = ["Mason", "Li Fang", "Mum", "Dad"];
+  
+  const defaultCriteria = [
+    { name: "Greenery / Water View", weight: 13, score: 3 },
+    { name: "Quiet & Low Road Noise", weight: 12, score: 3 },
+    { name: "High Floor / Top Floor (Lvl 11+)", weight: 12, score: 3 },
+    { name: "Bus Stop (≤5 mins walk)", weight: 11, score: 3 },
+    { name: "Ventilation & Breeze", weight: 10, score: 3 },
+    { name: "MRT / LRT (≤10 mins walk)", weight: 8, score: 3 },
+    { name: "Supermarket & Basic Food", weight: 8, score: 3 },
+    { name: "Uncluttered Corridor / Corner Unit", weight: 8, score: 3 },
+    { name: "Regular Layout (No Odd Shapes)", weight: 7, score: 3 },
+    { name: "Flooring Condition", weight: 6, score: 3 },
+    { name: "Wet Market & Eateries Variety", weight: 5, score: 3 }
+  ];
+
+  let profiles = JSON.parse(localStorage.getItem(STORAGE_KEY_PROFILES)) || defaultProfiles;
+  let currentProfile = profiles[0] || "Mason";
+  let criteriaData = JSON.parse(localStorage.getItem(STORAGE_KEY_CRITERIA)) || defaultCriteria;
+  let savedUnits = JSON.parse(localStorage.getItem(STORAGE_KEY_SAVED)) || [];
+
+  const profileSelect = document.getElementById("profileSelect");
+  const criteriaContainer = document.getElementById("criteriaList");
+  const totalScoreEl = document.getElementById("totalScore");
+  const verdictBadge = document.getElementById("verdictBadge");
+  const weightStatusBar = document.getElementById("weightStatusBar");
+  const weightTotalDisplay = document.getElementById("weightTotalDisplay");
+  const propNameInput = document.getElementById("propName");
+  const propPriceInput = document.getElementById("propPrice");
+  const savedUnitsContainer = document.getElementById("savedUnitsList");
+  const scoreBannerLabel = document.getElementById("scoreBannerLabel");
+
+  function saveAllState() {
+    localStorage.setItem(STORAGE_KEY_PROFILES, JSON.stringify(profiles));
+    localStorage.setItem(STORAGE_KEY_CRITERIA, JSON.stringify(criteriaData));
+    localStorage.setItem(STORAGE_KEY_SAVED, JSON.stringify(savedUnits));
+  }
+
+  function renderProfileSelect() {
+    profileSelect.innerHTML = "";
+    profiles.forEach(p => {
+      const opt = document.createElement("option");
+      opt.value = p;
+      opt.textContent = p;
+      if (p === currentProfile) opt.selected = true;
+      profileSelect.appendChild(opt);
+    });
+    scoreBannerLabel.textContent = `${currentProfile.toUpperCase()}'S SCORE`;
+  }
+
+  function renderCriteria() {
+    criteriaContainer.innerHTML = "";
+    criteriaData.forEach((item, index) => {
+      const card = document.createElement("div");
+      card.className = "criterion-card";
+      card.innerHTML = `
+        <div class="criterion-top">
+          <input type="text" class="criterion-name-input" value="${item.name}" placeholder="Criterion name" data-index="${index}" />
+          <div class="criterion-weight-wrapper">
+            <input type="number" class="criterion-weight-input" min="0" max="100" value="${item.weight}" data-index="${index}" />%
+          </div>
+          <button type="button" class="btn-delete" title="Delete" data-index="${index}">&times;</button>
+        </div>
+        <div class="criterion-slider-row">
+          <input type="range" min="1" max="5" step="1" value="${item.score}" data-index="${index}" />
+          <span class="score-display">${item.score}</span>
+        </div>
+      `;
+      criteriaContainer.appendChild(card);
+    });
+    bindCriteriaEvents();
+    calculateScore();
+  }
+
+  function bindCriteriaEvents() {
+    document.querySelectorAll(".criterion-name-input").forEach(input => {
+      input.addEventListener("input", (e) => {
+        criteriaData[e.target.dataset.index].name = e.target.value;
+        saveAllState();
+      });
+    });
+
+    document.querySelectorAll(".criterion-weight-input").forEach(input => {
+      input.addEventListener("input", (e) => {
+        const val = parseFloat(e.target.value) || 0;
+        criteriaData[e.target.dataset.index].weight = val;
+        saveAllState();
+        calculateScore();
+      });
+    });
+
+    document.querySelectorAll("input[type='range']").forEach(slider => {
+      slider.addEventListener("input", (e) => {
+        const val = parseInt(e.target.value, 10);
+        criteriaData[e.target.dataset.index].score = val;
+        e.target.nextElementSibling.textContent = val;
+        calculateScore();
+      });
+    });
+
+    document.querySelectorAll(".btn-delete").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        criteriaData.splice(e.target.dataset.index, 1);
+        saveAllState();
+        renderCriteria();
+      });
+    });
+  }
+
+  function calculateScore() {
+    let totalWeight = 0;
+    let weightedSum = 0;
+
+    criteriaData.forEach(item => {
+      totalWeight += item.weight;
+      weightedSum += item.score * item.weight;
+    });
+
+    weightTotalDisplay.textContent = `${totalWeight}%`;
+    if (totalWeight !== 100) {
+      weightStatusBar.className = "weight-status warn";
+      weightStatusBar.firstElementChild.textContent = "Total Weight (Adjust to 100%):";
+    } else {
+      weightStatusBar.className = "weight-status";
+      weightStatusBar.firstElementChild.textContent = "Total Weight Allocation:";
+    }
+
+    const finalScore = totalWeight > 0 ? (weightedSum / totalWeight).toFixed(2) : "0.00";
+    totalScoreEl.innerHTML = `${finalScore} <span style="font-size: 1rem; font-weight: 400; opacity: 0.7;">/ 5.00</span>`;
+
+    if (finalScore >= 4.20) {
+      verdictBadge.textContent = "High Conviction";
+      verdictBadge.className = "verdict-badge badge-green";
+    } else if (finalScore >= 3.50) {
+      verdictBadge.textContent = "Viable Contender";
+      verdictBadge.className = "verdict-badge badge-amber";
+    } else {
+      verdictBadge.textContent = "Discard";
+      verdictBadge.className = "verdict-badge badge-red";
+    }
+
+    return { finalScore, verdict: verdictBadge.textContent };
+  }
+
+  function renderSavedUnits() {
+    savedUnitsContainer.innerHTML = "";
+    if (savedUnits.length === 0) {
+      savedUnitsContainer.innerHTML = `<div class="empty-placeholder">No visited units saved yet. Score a unit above and click "Save My Rating".</div>`;
+      return;
+    }
+
+    savedUnits.forEach(u => {
+      const evals = Object.values(u.reviews || {});
+      if (evals.length > 0) {
+        const sum = evals.reduce((acc, curr) => acc + parseFloat(curr.score), 0);
+        u.avgScore = (sum / evals.length).toFixed(2);
+      } else {
+        u.avgScore = "0.00";
+      }
+    });
+
+    savedUnits.sort((a, b) => parseFloat(b.avgScore) - parseFloat(a.avgScore));
+
+    savedUnits.forEach((unit, index) => {
+      const card = document.createElement("div");
+      card.className = "saved-card";
+
+      let badgeClass = "badge-amber";
+      const avg = parseFloat(unit.avgScore);
+      if (avg >= 4.20) badgeClass = "badge-green";
+      else if (avg < 3.50) badgeClass = "badge-red";
+
+      const priceDisplay = unit.price ? `<span class="saved-info-price">(${unit.price})</span>` : "";
+
+      let reviewsHtml = "";
+      Object.entries(unit.reviews || {}).forEach(([pName, pData]) => {
+        reviewsHtml += `<span class="profile-pill">${pName}: <strong>${pData.score}</strong></span>`;
+      });
+
+      card.innerHTML = `
+        <div class="saved-header">
+          <div class="saved-info-name">#${index + 1} ${unit.name} ${priceDisplay}</div>
+          <span class="verdict-badge ${badgeClass}">${unit.avgScore} Avg</span>
+        </div>
+        <div class="saved-scores-breakdown">
+          ${reviewsHtml}
+        </div>
+        <div class="saved-card-footer">
+          <span style="font-size: 0.72rem; color: var(--text-muted);">${unit.lastUpdated || ""}</span>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn-sm" onclick="loadUnit('${unit.id}', '${currentProfile}')">Load Mine</button>
+            <button type="button" class="btn-sm btn-sm-del" onclick="deleteUnit('${unit.id}')">Del</button>
+          </div>
+        </div>
+      `;
+      savedUnitsContainer.appendChild(card);
+    });
+  }
+
+  window.loadUnit = function(id, profile) {
+    const target = savedUnits.find(u => u.id === id);
+    if (!target) return;
+
+    propNameInput.value = target.name;
+    propPriceInput.value = target.price || "";
+
+    const userReview = target.reviews && target.reviews[profile];
+    if (userReview) {
+      userReview.snapshot.forEach(savedItem => {
+        const match = criteriaData.find(c => c.name === savedItem.name);
+        if (match) match.score = savedItem.score;
+      });
+      renderCriteria();
+    } else {
+      alert(`No review saved yet by ${profile} for this unit. You can input your scores now.`);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  window.deleteUnit = function(id) {
+    savedUnits = savedUnits.filter(u => u.id !== id);
+    saveAllState();
+    renderSavedUnits();
+  };
+
+  profileSelect.addEventListener("change", (e) => {
+    currentProfile = e.target.value;
+    scoreBannerLabel.textContent = `${currentProfile.toUpperCase()}'S SCORE`;
+  });
+
+  document.getElementById("btnAddProfile").addEventListener("click", () => {
+    const name = prompt("Enter new evaluator name:");
+    if (name && !profiles.includes(name.trim())) {
+      profiles.push(name.trim());
+      currentProfile = name.trim();
+      saveAllState();
+      renderProfileSelect();
+    }
+  });
+
+  document.getElementById("btnSaveUnit").addEventListener("click", () => {
+    const unitName = propNameInput.value.trim();
+    if (!unitName) {
+      alert("Please enter a unit address or block number before saving.");
+      propNameInput.focus();
+      return;
+    }
+
+    const { finalScore, verdict } = calculateScore();
+    const unitKey = unitName.toLowerCase();
+    let unit = savedUnits.find(u => u.name.toLowerCase() === unitKey);
+
+    if (!unit) {
+      unit = {
+        id: "unit_" + Date.now(),
+        name: unitName,
+        price: propPriceInput.value.trim(),
+        reviews: {}
+      };
+      savedUnits.push(unit);
+    } else {
+      if (propPriceInput.value.trim()) unit.price = propPriceInput.value.trim();
+    }
+
+    unit.reviews[currentProfile] = {
+      score: finalScore,
+      verdict: verdict,
+      date: new Date().toLocaleDateString("en-SG", { day: 'numeric', month: 'short' }),
+      snapshot: criteriaData.map(c => ({ name: c.name, score: c.score, weight: c.weight }))
+    };
+
+    unit.lastUpdated = `Updated ${new Date().toLocaleDateString("en-SG", { day: 'numeric', month: 'short' })}`;
+
+    saveAllState();
+    renderSavedUnits();
+
+    const saveBtn = document.getElementById("btnSaveUnit");
+    saveBtn.textContent = `Saved for ${currentProfile}!`;
+    setTimeout(() => { saveBtn.textContent = "Save My Rating"; }, 1500);
+  });
+
+  document.getElementById("btnResetForm").addEventListener("click", () => {
+    propNameInput.value = "";
+    propPriceInput.value = "";
+    criteriaData.forEach(c => c.score = 3);
+    renderCriteria();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.getElementById("btnAdd").addEventListener("click", () => {
+    criteriaData.push({ name: "New Criterion", weight: 5, score: 3 });
+    saveAllState();
+    renderCriteria();
+  });
+
+  document.getElementById("btnToggleSync").addEventListener("click", () => {
+    const box = document.getElementById("syncBox");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+  });
+
+  document.getElementById("btnExportSync").addEventListener("click", () => {
+    const syncData = {
+      profiles: profiles,
+      criteria: criteriaData,
+      units: savedUnits
+    };
+    const code = btoa(unescape(encodeURIComponent(JSON.stringify(syncData))));
+    document.getElementById("syncDataText").value = code;
+    navigator.clipboard.writeText(code).then(() => {
+      alert("Sync code copied! Share this code with other family members to merge scores.");
+    });
+  });
+
+  document.getElementById("btnImportSync").addEventListener("click", () => {
+    const raw = document.getElementById("syncDataText").value.trim();
+    if (!raw) {
+      alert("Paste the sync code into the box first.");
+      return;
+    }
+    try {
+      const decoded = JSON.parse(decodeURIComponent(escape(atob(raw)))));
+      
+      if (decoded.profiles) {
+        decoded.profiles.forEach(p => { if (!profiles.includes(p)) profiles.push(p); });
+      }
+
+      if (decoded.units) {
+        decoded.units.forEach(incoming => {
+          const match = savedUnits.find(u => u.name.toLowerCase() === incoming.name.toLowerCase());
+          if (!match) {
+            savedUnits.push(incoming);
+          } else {
+            match.reviews = { ...match.reviews, ...incoming.reviews };
+            if (incoming.price) match.price = incoming.price;
+          }
+        });
+      }
+
+      saveAllState();
+      renderProfileSelect();
+      renderSavedUnits();
+      alert("Successfully merged scores!");
+    } catch (err) {
+      alert("Invalid sync code format.");
+    }
+  });
+
+  function generateLeaderboardText(platform) {
+    if (savedUnits.length === 0) return null;
+
+    const b = platform === 'tg' ? '**' : '*';
+    let report = `${b}House Hunting Ranked Leaderboard (Family Consensus):${b}\n\n`;
+
+    savedUnits.forEach((u, i) => {
+      const priceTag = u.price ? ` (${u.price})` : "";
+      report += `${b}${i + 1}. ${u.name}${b}${priceTag}\n`;
+      report += `• ${b}Family Avg:${b} ${u.avgScore} / 5.00\n`;
+      report += `• ${b}Breakdown:${b} `;
+      const sub = [];
+      Object.entries(u.reviews || {}).forEach(([pName, pData]) => {
+        sub.push(`${pName}: ${pData.score}`);
+      });
+      report += sub.join(" | ") + `\n\n`;
+    });
+
+    return report;
+  }
+
+  document.getElementById("btnCopyWA").addEventListener("click", () => {
+    const text = generateLeaderboardText('wa');
+    if (!text) {
+      alert("No saved units to export yet.");
+      return;
+    }
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById("btnCopyWA");
+      btn.textContent = "Copied WA!";
+      setTimeout(() => { btn.textContent = "WhatsApp"; }, 2000);
+    });
+  });
+
+  document.getElementById("btnCopyTG").addEventListener("click", () => {
+    const text = generateLeaderboardText('tg');
+    if (!text) {
+      alert("No saved units to export yet.");
+      return;
+    }
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById("btnCopyTG");
+      btn.textContent = "Copied TG!";
+      setTimeout(() => { btn.textContent = "Telegram"; }, 2000);
+    });
+  });
+
+  renderProfileSelect();
+  renderCriteria();
+  renderSavedUnits();
+</script>
+</body>
+</html>
