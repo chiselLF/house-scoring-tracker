@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>House Hunting Tracker - Multi-Profile</title>
+  <title>House Hunting Tracker</title>
   <style>
     :root {
       --primary: #2563eb;
@@ -85,7 +85,12 @@
     <div class="profile-bar">
       <div class="profile-select-group">
         <label for="profileSelect" style="font-size: 0.8rem; font-weight: 700;">Evaluator:</label>
-        <select id="profileSelect" class="profile-select"></select>
+        <select id="profileSelect" class="profile-select">
+          <option value="Mason">Mason</option>
+          <option value="Li Fang">Li Fang</option>
+          <option value="Mum">Mum</option>
+          <option value="Dad">Dad</option>
+        </select>
       </div>
       <button type="button" class="btn-sm" id="btnAddProfile">+ New Profile</button>
     </div>
@@ -99,7 +104,7 @@
   <div class="score-banner">
     <div>
       <div style="font-size: 0.75rem; opacity: 0.8;" id="scoreBannerLabel">MASON'S SCORE</div>
-      <div class="score-value" id="totalScore">0.00 <span style="font-size: 1rem; font-weight: 400; opacity: 0.7;">/ 5.00</span></div>
+      <div class="score-value" id="totalScore">3.00 <span style="font-size: 1rem; font-weight: 400; opacity: 0.7;">/ 5.00</span></div>
     </div>
     <div id="verdictBadge" class="verdict-badge badge-amber">Evaluating</div>
   </div>
@@ -109,7 +114,129 @@
     <span id="weightTotalDisplay">100%</span>
   </div>
 
-  <div id="criteriaList"></div>
+  <!-- Pre-rendered Criteria Container -->
+  <div id="criteriaList">
+    <div class="criterion-card" data-index="0">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Greenery / Water View" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="13" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="1">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Quiet & Low Road Noise" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="12" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="2">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="High Floor / Top Floor (Lvl 11+)" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="12" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="3">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Bus Stop (≤5 mins walk)" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="11" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="4">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Ventilation & Breeze" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="10" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="5">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="MRT / LRT (≤10 mins walk)" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="8" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="6">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Supermarket & Basic Food" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="8" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="7">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Uncluttered Corridor / Corner Unit" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="8" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="8">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Regular Layout (No Odd Shapes)" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="7" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="9">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Flooring Condition" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="6" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+
+    <div class="criterion-card" data-index="10">
+      <div class="criterion-top">
+        <input type="text" class="criterion-name-input" value="Wet Market & Eateries Variety" />
+        <div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="5" />%</div>
+        <button type="button" class="btn-delete">&times;</button>
+      </div>
+      <div class="criterion-slider-row">
+        <input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>
+      </div>
+    </div>
+  </div>
 
   <div class="action-group">
     <button type="button" class="btn btn-secondary" id="btnAdd">+ Add Criteria</button>
@@ -135,133 +262,75 @@
     </div>
   </div>
 
-  <div id="savedUnitsList" class="saved-list"></div>
+  <div id="savedUnitsList" class="saved-list">
+    <div class="empty-placeholder">No visited units saved yet. Score a unit above and click "Save My Rating".</div>
+  </div>
 </div>
 
 <script>
-  const STORAGE_KEY_PROFILES = "house_profiles_v5";
-  const STORAGE_KEY_CRITERIA = "house_criteria_v5";
-  const STORAGE_KEY_SAVED = "house_units_v5";
-
-  const defaultProfiles = ["Mason", "Li Fang", "Mum", "Dad"];
-  
-  const defaultCriteria = [
-    { name: "Greenery / Water View", weight: 13, score: 3 },
-    { name: "Quiet & Low Road Noise", weight: 12, score: 3 },
-    { name: "High Floor / Top Floor (Lvl 11+)", weight: 12, score: 3 },
-    { name: "Bus Stop (≤5 mins walk)", weight: 11, score: 3 },
-    { name: "Ventilation & Breeze", weight: 10, score: 3 },
-    { name: "MRT / LRT (≤10 mins walk)", weight: 8, score: 3 },
-    { name: "Supermarket & Basic Food", weight: 8, score: 3 },
-    { name: "Uncluttered Corridor / Corner Unit", weight: 8, score: 3 },
-    { name: "Regular Layout (No Odd Shapes)", weight: 7, score: 3 },
-    { name: "Flooring Condition", weight: 6, score: 3 },
-    { name: "Wet Market & Eateries Variety", weight: 5, score: 3 }
-  ];
-
-  let profiles = JSON.parse(localStorage.getItem(STORAGE_KEY_PROFILES)) || defaultProfiles;
-  let currentProfile = profiles[0] || "Mason";
-  let criteriaData = JSON.parse(localStorage.getItem(STORAGE_KEY_CRITERIA)) || defaultCriteria;
-  let savedUnits = JSON.parse(localStorage.getItem(STORAGE_KEY_SAVED)) || [];
-
-  const profileSelect = document.getElementById("profileSelect");
-  const criteriaContainer = document.getElementById("criteriaList");
-  const totalScoreEl = document.getElementById("totalScore");
-  const verdictBadge = document.getElementById("verdictBadge");
-  const weightStatusBar = document.getElementById("weightStatusBar");
-  const weightTotalDisplay = document.getElementById("weightTotalDisplay");
-  const propNameInput = document.getElementById("propName");
-  const propPriceInput = document.getElementById("propPrice");
-  const savedUnitsContainer = document.getElementById("savedUnitsList");
-  const scoreBannerLabel = document.getElementById("scoreBannerLabel");
-
-  function saveAllState() {
-    localStorage.setItem(STORAGE_KEY_PROFILES, JSON.stringify(profiles));
-    localStorage.setItem(STORAGE_KEY_CRITERIA, JSON.stringify(criteriaData));
-    localStorage.setItem(STORAGE_KEY_SAVED, JSON.stringify(savedUnits));
+  // Safe Local Storage Handlers to avoid browser SecurityError crashes
+  function safeGet(key, fallback) {
+    try {
+      var val = localStorage.getItem(key);
+      return val ? JSON.parse(val) : fallback;
+    } catch (e) {
+      return fallback;
+    }
   }
 
-  function renderProfileSelect() {
+  function safeSet(key, val) {
+    try {
+      localStorage.setItem(key, JSON.stringify(val));
+    } catch (e) {}
+  }
+
+  var defaultProfiles = ["Mason", "Li Fang", "Mum", "Dad"];
+  var profiles = safeGet("house_profiles_v6", defaultProfiles);
+  var currentProfile = profiles[0] || "Mason";
+  var savedUnits = safeGet("house_units_v6", []);
+
+  var profileSelect = document.getElementById("profileSelect");
+  var criteriaContainer = document.getElementById("criteriaList");
+  var totalScoreEl = document.getElementById("totalScore");
+  var verdictBadge = document.getElementById("verdictBadge");
+  var weightStatusBar = document.getElementById("weightStatusBar");
+  var weightTotalDisplay = document.getElementById("weightTotalDisplay");
+  var propNameInput = document.getElementById("propName");
+  var propPriceInput = document.getElementById("propPrice");
+  var savedUnitsContainer = document.getElementById("savedUnitsList");
+  var scoreBannerLabel = document.getElementById("scoreBannerLabel");
+
+  function refreshProfilesUI() {
     profileSelect.innerHTML = "";
-    profiles.forEach(p => {
-      const opt = document.createElement("option");
+    profiles.forEach(function(p) {
+      var opt = document.createElement("option");
       opt.value = p;
       opt.textContent = p;
       if (p === currentProfile) opt.selected = true;
       profileSelect.appendChild(opt);
     });
-    scoreBannerLabel.textContent = `${currentProfile.toUpperCase()}'S SCORE`;
-  }
-
-  function renderCriteria() {
-    criteriaContainer.innerHTML = "";
-    criteriaData.forEach((item, index) => {
-      const card = document.createElement("div");
-      card.className = "criterion-card";
-      card.innerHTML = `
-        <div class="criterion-top">
-          <input type="text" class="criterion-name-input" value="${item.name}" placeholder="Criterion name" data-index="${index}" />
-          <div class="criterion-weight-wrapper">
-            <input type="number" class="criterion-weight-input" min="0" max="100" value="${item.weight}" data-index="${index}" />%
-          </div>
-          <button type="button" class="btn-delete" title="Delete" data-index="${index}">&times;</button>
-        </div>
-        <div class="criterion-slider-row">
-          <input type="range" min="1" max="5" step="1" value="${item.score}" data-index="${index}" />
-          <span class="score-display">${item.score}</span>
-        </div>
-      `;
-      criteriaContainer.appendChild(card);
-    });
-    bindCriteriaEvents();
-    calculateScore();
-  }
-
-  function bindCriteriaEvents() {
-    document.querySelectorAll(".criterion-name-input").forEach(input => {
-      input.addEventListener("input", (e) => {
-        criteriaData[e.target.dataset.index].name = e.target.value;
-        saveAllState();
-      });
-    });
-
-    document.querySelectorAll(".criterion-weight-input").forEach(input => {
-      input.addEventListener("input", (e) => {
-        const val = parseFloat(e.target.value) || 0;
-        criteriaData[e.target.dataset.index].weight = val;
-        saveAllState();
-        calculateScore();
-      });
-    });
-
-    document.querySelectorAll("input[type='range']").forEach(slider => {
-      slider.addEventListener("input", (e) => {
-        const val = parseInt(e.target.value, 10);
-        criteriaData[e.target.dataset.index].score = val;
-        e.target.nextElementSibling.textContent = val;
-        calculateScore();
-      });
-    });
-
-    document.querySelectorAll(".btn-delete").forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        criteriaData.splice(e.target.dataset.index, 1);
-        saveAllState();
-        renderCriteria();
-      });
-    });
+    scoreBannerLabel.textContent = currentProfile.toUpperCase() + "'S SCORE";
   }
 
   function calculateScore() {
-    let totalWeight = 0;
-    let weightedSum = 0;
+    var cards = criteriaContainer.querySelectorAll(".criterion-card");
+    var totalWeight = 0;
+    var weightedSum = 0;
 
-    criteriaData.forEach(item => {
-      totalWeight += item.weight;
-      weightedSum += item.score * item.weight;
+    cards.forEach(function(card) {
+      var weightInput = card.querySelector(".criterion-weight-input");
+      var slider = card.querySelector("input[type='range']");
+      var display = card.querySelector(".score-display");
+
+      var weight = parseFloat(weightInput.value) || 0;
+      var score = parseInt(slider.value, 10) || 1;
+      display.textContent = score;
+
+      totalWeight += weight;
+      weightedSum += score * weight;
     });
 
-    weightTotalDisplay.textContent = `${totalWeight}%`;
+    weightTotalDisplay.textContent = totalWeight + "%";
     if (totalWeight !== 100) {
       weightStatusBar.className = "weight-status warn";
       weightStatusBar.firstElementChild.textContent = "Total Weight (Adjust to 100%):";
@@ -270,13 +339,13 @@
       weightStatusBar.firstElementChild.textContent = "Total Weight Allocation:";
     }
 
-    const finalScore = totalWeight > 0 ? (weightedSum / totalWeight).toFixed(2) : "0.00";
-    totalScoreEl.innerHTML = `${finalScore} <span style="font-size: 1rem; font-weight: 400; opacity: 0.7;">/ 5.00</span>`;
+    var finalScore = totalWeight > 0 ? (weightedSum / totalWeight).toFixed(2) : "0.00";
+    totalScoreEl.innerHTML = finalScore + ' <span style="font-size: 1rem; font-weight: 400; opacity: 0.7;">/ 5.00</span>';
 
-    if (finalScore >= 4.20) {
+    if (parseFloat(finalScore) >= 4.20) {
       verdictBadge.textContent = "High Conviction";
       verdictBadge.className = "verdict-badge badge-green";
-    } else if (finalScore >= 3.50) {
+    } else if (parseFloat(finalScore) >= 3.50) {
       verdictBadge.textContent = "Viable Contender";
       verdictBadge.className = "verdict-badge badge-amber";
     } else {
@@ -284,261 +353,286 @@
       verdictBadge.className = "verdict-badge badge-red";
     }
 
-    return { finalScore, verdict: verdictBadge.textContent };
+    return { finalScore: finalScore, verdict: verdictBadge.textContent };
+  }
+
+  function bindRowEvents(card) {
+    var weightInput = card.querySelector(".criterion-weight-input");
+    var slider = card.querySelector("input[type='range']");
+    var delBtn = card.querySelector(".btn-delete");
+
+    weightInput.addEventListener("input", calculateScore);
+    slider.addEventListener("input", calculateScore);
+    delBtn.addEventListener("click", function() {
+      card.remove();
+      calculateScore();
+    });
+  }
+
+  function initExistingCards() {
+    var cards = criteriaContainer.querySelectorAll(".criterion-card");
+    cards.forEach(function(card) {
+      bindRowEvents(card);
+    });
   }
 
   function renderSavedUnits() {
     savedUnitsContainer.innerHTML = "";
     if (savedUnits.length === 0) {
-      savedUnitsContainer.innerHTML = `<div class="empty-placeholder">No visited units saved yet. Score a unit above and click "Save My Rating".</div>`;
+      savedUnitsContainer.innerHTML = '<div class="empty-placeholder">No visited units saved yet. Score a unit above and click "Save My Rating".</div>';
       return;
     }
 
-    savedUnits.forEach(u => {
-      const evals = Object.values(u.reviews || {});
+    savedUnits.forEach(function(u) {
+      var evals = Object.values(u.reviews || {});
       if (evals.length > 0) {
-        const sum = evals.reduce((acc, curr) => acc + parseFloat(curr.score), 0);
+        var sum = evals.reduce(function(acc, curr) { return acc + parseFloat(curr.score); }, 0);
         u.avgScore = (sum / evals.length).toFixed(2);
       } else {
         u.avgScore = "0.00";
       }
     });
 
-    savedUnits.sort((a, b) => parseFloat(b.avgScore) - parseFloat(a.avgScore));
+    savedUnits.sort(function(a, b) { return parseFloat(b.avgScore) - parseFloat(a.avgScore); });
 
-    savedUnits.forEach((unit, index) => {
-      const card = document.createElement("div");
+    savedUnits.forEach(function(unit, index) {
+      var card = document.createElement("div");
       card.className = "saved-card";
 
-      let badgeClass = "badge-amber";
-      const avg = parseFloat(unit.avgScore);
+      var badgeClass = "badge-amber";
+      var avg = parseFloat(unit.avgScore);
       if (avg >= 4.20) badgeClass = "badge-green";
       else if (avg < 3.50) badgeClass = "badge-red";
 
-      const priceDisplay = unit.price ? `<span class="saved-info-price">(${unit.price})</span>` : "";
+      var priceDisplay = unit.price ? '<span class="saved-info-price">(' + unit.price + ')</span>' : "";
 
-      let reviewsHtml = "";
-      Object.entries(unit.reviews || {}).forEach(([pName, pData]) => {
-        reviewsHtml += `<span class="profile-pill">${pName}: <strong>${pData.score}</strong></span>`;
+      var reviewsHtml = "";
+      Object.entries(unit.reviews || {}).forEach(function(entry) {
+        reviewsHtml += '<span class="profile-pill">' + entry[0] + ': <strong>' + entry[1].score + '</strong></span>';
       });
 
-      card.innerHTML = `
-        <div class="saved-header">
-          <div class="saved-info-name">#${index + 1} ${unit.name} ${priceDisplay}</div>
-          <span class="verdict-badge ${badgeClass}">${unit.avgScore} Avg</span>
-        </div>
-        <div class="saved-scores-breakdown">
-          ${reviewsHtml}
-        </div>
-        <div class="saved-card-footer">
-          <span style="font-size: 0.72rem; color: var(--text-muted);">${unit.lastUpdated || ""}</span>
-          <div style="display: flex; gap: 6px;">
-            <button type="button" class="btn-sm" onclick="loadUnit('${unit.id}', '${currentProfile}')">Load Mine</button>
-            <button type="button" class="btn-sm btn-sm-del" onclick="deleteUnit('${unit.id}')">Del</button>
-          </div>
-        </div>
-      `;
+      card.innerHTML = 
+        '<div class="saved-header">' +
+          '<div class="saved-info-name">#' + (index + 1) + ' ' + unit.name + ' ' + priceDisplay + '</div>' +
+          '<span class="verdict-badge ' + badgeClass + '">' + unit.avgScore + ' Avg</span>' +
+        '</div>' +
+        '<div class="saved-scores-breakdown">' + reviewsHtml + '</div>' +
+        '<div class="saved-card-footer">' +
+          '<span style="font-size: 0.72rem; color: var(--text-muted);">' + (unit.lastUpdated || "") + '</span>' +
+          '<div style="display: flex; gap: 6px;">' +
+            '<button type="button" class="btn-sm" onclick="loadUnit(\'' + unit.id + '\')">Load Mine</button>' +
+            '<button type="button" class="btn-sm btn-sm-del" onclick="deleteUnit(\'' + unit.id + '\')">Del</button>' +
+          '</div>' +
+        '</div>';
       savedUnitsContainer.appendChild(card);
     });
   }
 
-  window.loadUnit = function(id, profile) {
-    const target = savedUnits.find(u => u.id === id);
+  window.loadUnit = function(id) {
+    var target = savedUnits.find(function(u) { return u.id === id; });
     if (!target) return;
 
     propNameInput.value = target.name;
     propPriceInput.value = target.price || "";
 
-    const userReview = target.reviews && target.reviews[profile];
-    if (userReview) {
-      userReview.snapshot.forEach(savedItem => {
-        const match = criteriaData.find(c => c.name === savedItem.name);
-        if (match) match.score = savedItem.score;
+    var userReview = target.reviews && target.reviews[currentProfile];
+    if (userReview && userReview.snapshot) {
+      var cards = criteriaContainer.querySelectorAll(".criterion-card");
+      userReview.snapshot.forEach(function(item) {
+        cards.forEach(function(c) {
+          var name = c.querySelector(".criterion-name-input").value;
+          if (name === item.name) {
+            c.querySelector("input[type='range']").value = item.score;
+            c.querySelector(".score-display").textContent = item.score;
+            c.querySelector(".criterion-weight-input").value = item.weight;
+          }
+        });
       });
-      renderCriteria();
+      calculateScore();
     } else {
-      alert(`No review saved yet by ${profile} for this unit. You can input your scores now.`);
+      alert("No score entered by " + currentProfile + " for this flat yet.");
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   window.deleteUnit = function(id) {
-    savedUnits = savedUnits.filter(u => u.id !== id);
-    saveAllState();
+    savedUnits = savedUnits.filter(function(u) { return u.id !== id; });
+    safeSet("house_units_v6", savedUnits);
     renderSavedUnits();
   };
 
-  profileSelect.addEventListener("change", (e) => {
+  profileSelect.addEventListener("change", function(e) {
     currentProfile = e.target.value;
-    scoreBannerLabel.textContent = `${currentProfile.toUpperCase()}'S SCORE`;
+    scoreBannerLabel.textContent = currentProfile.toUpperCase() + "'S SCORE";
   });
 
-  document.getElementById("btnAddProfile").addEventListener("click", () => {
-    const name = prompt("Enter new evaluator name:");
-    if (name && !profiles.includes(name.trim())) {
+  document.getElementById("btnAddProfile").addEventListener("click", function() {
+    var name = prompt("Enter new evaluator name:");
+    if (name && profiles.indexOf(name.trim()) === -1) {
       profiles.push(name.trim());
       currentProfile = name.trim();
-      saveAllState();
-      renderProfileSelect();
+      safeSet("house_profiles_v6", profiles);
+      refreshProfilesUI();
     }
   });
 
-  document.getElementById("btnSaveUnit").addEventListener("click", () => {
-    const unitName = propNameInput.value.trim();
+  document.getElementById("btnSaveUnit").addEventListener("click", function() {
+    var unitName = propNameInput.value.trim();
     if (!unitName) {
-      alert("Please enter a unit address or block number before saving.");
+      alert("Please enter a unit address or block number first.");
       propNameInput.focus();
       return;
     }
 
-    const { finalScore, verdict } = calculateScore();
-    const unitKey = unitName.toLowerCase();
-    let unit = savedUnits.find(u => u.name.toLowerCase() === unitKey);
+    var result = calculateScore();
+    var existing = savedUnits.find(function(u) { return u.name.toLowerCase() === unitName.toLowerCase(); });
 
-    if (!unit) {
-      unit = {
-        id: "unit_" + Date.now(),
+    if (!existing) {
+      existing = {
+        id: "u_" + Date.now(),
         name: unitName,
         price: propPriceInput.value.trim(),
         reviews: {}
       };
-      savedUnits.push(unit);
+      savedUnits.push(existing);
     } else {
-      if (propPriceInput.value.trim()) unit.price = propPriceInput.value.trim();
+      if (propPriceInput.value.trim()) existing.price = propPriceInput.value.trim();
     }
 
-    unit.reviews[currentProfile] = {
-      score: finalScore,
-      verdict: verdict,
-      date: new Date().toLocaleDateString("en-SG", { day: 'numeric', month: 'short' }),
-      snapshot: criteriaData.map(c => ({ name: c.name, score: c.score, weight: c.weight }))
+    var snapshot = [];
+    criteriaContainer.querySelectorAll(".criterion-card").forEach(function(c) {
+      snapshot.push({
+        name: c.querySelector(".criterion-name-input").value,
+        weight: parseFloat(c.querySelector(".criterion-weight-input").value) || 0,
+        score: parseInt(c.querySelector("input[type='range']").value, 10) || 1
+      });
+    });
+
+    existing.reviews[currentProfile] = {
+      score: result.finalScore,
+      verdict: result.verdict,
+      snapshot: snapshot
     };
+    existing.lastUpdated = "Updated " + new Date().toLocaleDateString("en-SG", { day: 'numeric', month: 'short' });
 
-    unit.lastUpdated = `Updated ${new Date().toLocaleDateString("en-SG", { day: 'numeric', month: 'short' })}`;
-
-    saveAllState();
+    safeSet("house_units_v6", savedUnits);
     renderSavedUnits();
 
-    const saveBtn = document.getElementById("btnSaveUnit");
-    saveBtn.textContent = `Saved for ${currentProfile}!`;
-    setTimeout(() => { saveBtn.textContent = "Save My Rating"; }, 1500);
+    var btn = document.getElementById("btnSaveUnit");
+    btn.textContent = "Saved for " + currentProfile + "!";
+    setTimeout(function() { btn.textContent = "Save My Rating"; }, 1500);
   });
 
-  document.getElementById("btnResetForm").addEventListener("click", () => {
+  document.getElementById("btnResetForm").addEventListener("click", function() {
     propNameInput.value = "";
     propPriceInput.value = "";
-    criteriaData.forEach(c => c.score = 3);
-    renderCriteria();
+    criteriaContainer.querySelectorAll("input[type='range']").forEach(function(s) { s.value = 3; });
+    calculateScore();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  document.getElementById("btnAdd").addEventListener("click", () => {
-    criteriaData.push({ name: "New Criterion", weight: 5, score: 3 });
-    saveAllState();
-    renderCriteria();
+  document.getElementById("btnAdd").addEventListener("click", function() {
+    var card = document.createElement("div");
+    card.className = "criterion-card";
+    card.innerHTML = 
+      '<div class="criterion-top">' +
+        '<input type="text" class="criterion-name-input" value="New Criterion" />' +
+        '<div class="criterion-weight-wrapper"><input type="number" class="criterion-weight-input" value="5" />%</div>' +
+        '<button type="button" class="btn-delete">&times;</button>' +
+      '</div>' +
+      '<div class="criterion-slider-row">' +
+        '<input type="range" min="1" max="5" step="1" value="3" /><span class="score-display">3</span>' +
+      '</div>';
+    criteriaContainer.appendChild(card);
+    bindRowEvents(card);
+    calculateScore();
   });
 
-  document.getElementById("btnToggleSync").addEventListener("click", () => {
-    const box = document.getElementById("syncBox");
+  document.getElementById("btnToggleSync").addEventListener("click", function() {
+    var box = document.getElementById("syncBox");
     box.style.display = box.style.display === "block" ? "none" : "block";
   });
 
-  document.getElementById("btnExportSync").addEventListener("click", () => {
-    const syncData = {
-      profiles: profiles,
-      criteria: criteriaData,
-      units: savedUnits
-    };
-    const code = btoa(unescape(encodeURIComponent(JSON.stringify(syncData))));
+  document.getElementById("btnExportSync").addEventListener("click", function() {
+    var syncData = { profiles: profiles, units: savedUnits };
+    var code = btoa(unescape(encodeURIComponent(JSON.stringify(syncData))));
     document.getElementById("syncDataText").value = code;
-    navigator.clipboard.writeText(code).then(() => {
-      alert("Sync code copied! Share this code with other family members to merge scores.");
+    navigator.clipboard.writeText(code).then(function() {
+      alert("Sync code copied! Send via WhatsApp to merge phones.");
     });
   });
 
-  document.getElementById("btnImportSync").addEventListener("click", () => {
-    const raw = document.getElementById("syncDataText").value.trim();
-    if (!raw) {
-      alert("Paste the sync code into the box first.");
-      return;
-    }
+  document.getElementById("btnImportSync").addEventListener("click", function() {
+    var raw = document.getElementById("syncDataText").value.trim();
+    if (!raw) { alert("Paste sync code first."); return; }
     try {
-      const decoded = JSON.parse(decodeURIComponent(escape(atob(raw)))));
-      
+      var decoded = JSON.parse(decodeURIComponent(escape(atob(raw))));
       if (decoded.profiles) {
-        decoded.profiles.forEach(p => { if (!profiles.includes(p)) profiles.push(p); });
+        decoded.profiles.forEach(function(p) { if (profiles.indexOf(p) === -1) profiles.push(p); });
       }
-
       if (decoded.units) {
-        decoded.units.forEach(incoming => {
-          const match = savedUnits.find(u => u.name.toLowerCase() === incoming.name.toLowerCase());
+        decoded.units.forEach(function(inc) {
+          var match = savedUnits.find(function(u) { return u.name.toLowerCase() === inc.name.toLowerCase(); });
           if (!match) {
-            savedUnits.push(incoming);
+            savedUnits.push(inc);
           } else {
-            match.reviews = { ...match.reviews, ...incoming.reviews };
-            if (incoming.price) match.price = incoming.price;
+            match.reviews = Object.assign({}, match.reviews, inc.reviews);
+            if (inc.price) match.price = inc.price;
           }
         });
       }
-
-      saveAllState();
-      renderProfileSelect();
+      safeSet("house_profiles_v6", profiles);
+      safeSet("house_units_v6", savedUnits);
+      refreshProfilesUI();
       renderSavedUnits();
-      alert("Successfully merged scores!");
-    } catch (err) {
-      alert("Invalid sync code format.");
+      alert("Merged successfully!");
+    } catch(err) {
+      alert("Invalid sync code.");
     }
   });
 
-  function generateLeaderboardText(platform) {
+  function exportText(platform) {
     if (savedUnits.length === 0) return null;
-
-    const b = platform === 'tg' ? '**' : '*';
-    let report = `${b}House Hunting Ranked Leaderboard (Family Consensus):${b}\n\n`;
-
-    savedUnits.forEach((u, i) => {
-      const priceTag = u.price ? ` (${u.price})` : "";
-      report += `${b}${i + 1}. ${u.name}${b}${priceTag}\n`;
-      report += `• ${b}Family Avg:${b} ${u.avgScore} / 5.00\n`;
-      report += `• ${b}Breakdown:${b} `;
-      const sub = [];
-      Object.entries(u.reviews || {}).forEach(([pName, pData]) => {
-        sub.push(`${pName}: ${pData.score}`);
+    var b = platform === 'tg' ? '**' : '*';
+    var out = b + "House Hunting Ranked Leaderboard (Family Consensus):" + b + "\n\n";
+    savedUnits.forEach(function(u, i) {
+      var priceTag = u.price ? " (" + u.price + ")" : "";
+      out += b + (i + 1) + ". " + u.name + b + priceTag + "\n";
+      out += "• " + b + "Family Avg:" + b + " " + u.avgScore + " / 5.00\n";
+      out += "• " + b + "Breakdown:" + b + " ";
+      var sub = [];
+      Object.entries(u.reviews || {}).forEach(function(e) {
+        sub.push(e[0] + ": " + e[1].score);
       });
-      report += sub.join(" | ") + `\n\n`;
+      out += sub.join(" | ") + "\n\n";
     });
-
-    return report;
+    return out;
   }
 
-  document.getElementById("btnCopyWA").addEventListener("click", () => {
-    const text = generateLeaderboardText('wa');
-    if (!text) {
-      alert("No saved units to export yet.");
-      return;
-    }
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.getElementById("btnCopyWA");
-      btn.textContent = "Copied WA!";
-      setTimeout(() => { btn.textContent = "WhatsApp"; }, 2000);
+  document.getElementById("btnCopyWA").addEventListener("click", function() {
+    var txt = exportText('wa');
+    if (!txt) { alert("No saved units yet."); return; }
+    navigator.clipboard.writeText(txt).then(function() {
+      var b = document.getElementById("btnCopyWA");
+      b.textContent = "Copied WA!";
+      setTimeout(function() { b.textContent = "WhatsApp"; }, 2000);
     });
   });
 
-  document.getElementById("btnCopyTG").addEventListener("click", () => {
-    const text = generateLeaderboardText('tg');
-    if (!text) {
-      alert("No saved units to export yet.");
-      return;
-    }
-    navigator.clipboard.writeText(text).then(() => {
-      const btn = document.getElementById("btnCopyTG");
-      btn.textContent = "Copied TG!";
-      setTimeout(() => { btn.textContent = "Telegram"; }, 2000);
+  document.getElementById("btnCopyTG").addEventListener("click", function() {
+    var txt = exportText('tg');
+    if (!txt) { alert("No saved units yet."); return; }
+    navigator.clipboard.writeText(txt).then(function() {
+      var b = document.getElementById("btnCopyTG");
+      b.textContent = "Copied TG!";
+      setTimeout(function() { b.textContent = "Telegram"; }, 2000);
     });
   });
 
-  renderProfileSelect();
-  renderCriteria();
+  // Run initialization
+  refreshProfilesUI();
+  initExistingCards();
+  calculateScore();
   renderSavedUnits();
 </script>
 </body>
